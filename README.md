@@ -1,14 +1,10 @@
 Compilation in clang stdenv in nix.
 -----------------------------------
 
+Git repo accompanying iseue
+https://github.com/NixOS/nixpkgs/issues/216047
+
 This small example project does not compile with with clang stdenv.
-
-This has been reported in the context of Darwin
-https://github.com/NixOS/nixpkgs/issues/150655
-
-... but it seems to be a general issue with how clang and bazel interact
-compiling c and c++ files. Hopefully this self-contained example helps
-working out the issues.
 
 This is the [shell.nix](./shell.nix) used in this example project, allowing
 to choose between regular and clang stdenv.
@@ -30,16 +26,17 @@ used_stdenv.mkDerivation {
 
 Clone this repo and run with
 
-```
-nix-shell
-bazel clean ; bazel build //... && bazel-bin/main
+```bash
+git clone https://github.com/hzeller/nix-bazel-with-clang
+cd nix-bazel-with-clang
+nix-shell --command 'bazel clean ; bazel build //... && bazel-bin/main'
 ```
 
 This results in this build
 
 ### With used_stdenv = pkgs.clang13Stdenv
 
-```bash
+```console
 $ bazel clean ; bazel build //... && bazel-bin/main
 INFO: Starting clean (this may take a while). Consider using --async if the clean takes more than several minutes.
 INFO: Analyzed 2 targets (15 packages loaded, 63 targets configured).
@@ -60,7 +57,7 @@ FAILED: Build did NOT complete successfully
 
 Compiling with the default stdenv (change the comments in `shell.nix`) works
 
-```bash
+```console
 $ bazel clean ; bazel build //... && bazel-bin/main
 INFO: Starting clean (this may take a while). Consider using --async if the clean takes more than several minutes.
 INFO: Analyzed 2 targets (15 packages loaded, 62 targets configured).
